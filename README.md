@@ -1,2 +1,2 @@
 # degrok
-Filters out @grok tweets on twitter
+Filters out \@grok mentions on twitter
