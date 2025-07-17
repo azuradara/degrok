@@ -10,97 +10,77 @@
 // @run-at       document-start
 // ==/UserScript==
 
-(function() {
-  'use strict';
+;(function () {
+  'use strict'
 
-  const GROK_PATTERNS = [
-      /@grok\b/i,
-      /\bgrok\b/i,
-      /@xai/i
-  ];
-
-  function containsGrokMention(text) {
-      return GROK_PATTERNS.some(pattern => pattern.test(text));
-  }
-
-  function hideTweet(tweetElement) {
-      if (tweetElement && !tweetElement.dataset.degrokHidden) {
-          tweetElement.style.display = 'none';
-          tweetElement.dataset.degrokHidden = 'true';
-      }
-  }
-
-  function checkAndHideTweet(tweetElement) {
-      if (!tweetElement || tweetElement.dataset.degrokChecked) {
-          return;
-      }
-
-      const textContent = tweetElement.textContent || '';
-
-      if (containsGrokMention(textContent)) {
-          hideTweet(tweetElement);
-      }
-
-      tweetElement.dataset.degrokChecked = 'true';
-  }
+  const GROK_PATTERNS = [/@grok\b/i, /\bgrok\b/i, /@xai/i]
 
   function processTweets() {
-      const tweetSelectors = [
-          '[data-testid="tweet"]',
-          '[data-testid="tweetText"]',
-          'article[data-testid="tweet"]',
-          'div[data-testid="tweet"]'
-      ];
+    const tweetSelectors = ['[data-testid="tweet"]', '[data-testid="tweetText"]', 'article[data-testid="tweet"]', 'div[data-testid="tweet"]']
 
-      tweetSelectors.forEach(selector => {
-          const tweets = document.querySelectorAll(selector);
-          tweets.forEach(tweet => {
-              const tweetContainer = tweet.closest('article') || tweet.closest('[data-testid="tweet"]') || tweet;
-              checkAndHideTweet(tweetContainer);
-          });
-      });
+    tweetSelectors.forEach((selector) => {
+      const tweets = document.querySelectorAll(selector)
+      tweets.forEach((tweet) => {
+        const tweetElement = tweet.closest('article') || tweet.closest('[data-testid="tweet"]') || tweet
+
+        if (!tweetElement || tweetElement.dataset.degrokChecked) {
+          return
+        }
+
+        const textContent = tweetElement.textContent || ''
+
+        if (GROK_PATTERNS.some((pattern) => pattern.test(textContent))) {
+          if (tweetElement && !tweetElement.dataset.degrokHidden) {
+            tweetElement.style.display = 'none'
+            tweetElement.dataset.degrokHidden = 'true'
+          }
+        }
+
+        tweetElement.dataset.degrokChecked = 'true'
+      })
+    })
   }
 
   function setupObserver() {
-      const observer = new MutationObserver((mutations) => {
-          let shouldProcess = false;
+    const observer = new MutationObserver((mutations) => {
+      let shouldProcess = false
 
-          mutations.forEach((mutation) => {
-              if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                  shouldProcess = true;
-              }
-          });
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          shouldProcess = true
+        }
+      })
 
-          if (shouldProcess) {
-              setTimeout(processTweets, 100);
-          }
-      });
+      if (shouldProcess) {
+        setTimeout(processTweets, 100)
+      }
+    })
 
-      observer.observe(document.body, {
-          childList: true,
-          subtree: true
-      });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
 
-      return observer;
+    return observer
   }
 
   function init() {
-      if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', () => {
-              setTimeout(() => {
-                  processTweets();
-                  setupObserver();
-              }, 1000);
-          });
-      } else {
-          setTimeout(() => {
-              processTweets();
-              setupObserver();
-          }, 1000);
-      }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          processTweets()
+          setupObserver()
+        }, 1000)
+      })
+    } else {
+      setTimeout(() => {
+        processTweets()
+        setupObserver()
+      }, 1000)
+    }
 
-      setInterval(processTweets, 3000);
+    setInterval(processTweets, 3000)
   }
 
-  init();
-})();
+  init()
+})()
