@@ -13,7 +13,7 @@
 ;(function () {
   'use strict'
 
-  const GROK_PATTERNS = [/@grok\b/i, /\bgrok\b/i, /@xai/i]
+  const GROK_PATTERNS = [/@grok\b/i, /@xai/i]
 
   function processTweets() {
     const tweetSelectors = ['[data-testid="tweet"]', '[data-testid="tweetText"]', 'article[data-testid="tweet"]', 'div[data-testid="tweet"]']
