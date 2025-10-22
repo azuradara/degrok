@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "degrok - Filter @grok mentions on Twitter",
+  "name": "degrok - No more slop",
   "version": "1.0",
   "description": "Filters out @grok tweets and replies on Twitter",
   "permissions": ["storage"],
