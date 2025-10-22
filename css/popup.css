@@ -1,0 +1,37 @@
+body {
+  width: 200px;
+}
+
+.popup-title {
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  text-align: center;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.menu-item:hover {
+  background-color: #111;
+  color: rgb(238 238 238 / 1);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
